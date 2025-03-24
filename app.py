@@ -18,18 +18,19 @@ def get_gemini_response(input_prompt, image, prompt):
     return response.text
 
 def input_pdf_setup(uploaded_file):
-    if uploaded_file:
-        images = pdf2image.convert_from_bytes(
-            uploaded_file.read(),
-            poppler_path=POPPLER_PATH
-        )
-        first_page = images[0]
-
-        # Convert to PIL Image format
-        return first_page  # Return the PIL Image directly
-
-    else:
-        raise FileNotFoundError("No file uploaded")
+    try:
+        if uploaded_file:
+            images = pdf2image.convert_from_bytes(
+                uploaded_file.read(),
+                poppler_path=None  # Remove the Windows-specific path for cloud deployment
+            )
+            first_page = images[0]
+            return first_page
+        else:
+            raise FileNotFoundError("No file uploaded")
+    except Exception as e:
+        st.error(f"Error processing PDF: Please make sure you've uploaded a valid PDF file")
+        raise e
 
 
 
