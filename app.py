@@ -44,8 +44,8 @@ if uploaded_file is not None:
     st.write("PDF Uploaded Successfully!!")
 
 submit1 = st.button("Tell me about the resume")
- 
 submit3 = st.button("Percentage Match")
+submit2 = st.button("Suggest Better Keywords")  # New button
 
 input_prompt1 = """
 You are an experienced HR professional with technical expertise in one or more of the following domains: Data Science, Full Stack Development, Big Data Engineering, DevOps, or Data Analysis.
@@ -60,7 +60,24 @@ Please provide a professional evaluation that includes:
 Ensure your feedback is concise, insightful, and framed from a recruitment perspective.
 """
 
+input_prompt2 = """
+You are an ATS optimization expert. Your task is to analyze the resume and suggest better keyword alternatives to improve the ATS score.
 
+Please analyze the resume and provide a list of word replacements in the following format:
+1. Current Word -> Recommended Word (Reason for change)
+
+For example:
+- "Managed" -> "Led" (More impactful leadership term)
+- "Used" -> "Implemented" (More professional and technical)
+
+Focus on:
+- Technical skills and tools
+- Action verbs
+- Industry-specific terminology
+- Job titles and roles
+
+Provide only the most impactful 5-7 word replacements that would significantly improve the ATS score.
+"""
 
 input_prompt3 = """
 You are an expert ATS (Applicant Tracking System) evaluator with in-depth knowledge in at least one of the following domains: Data Science, Full Stack Development, Big Data Engineering, DevOps, or Data Analysis, as well as a strong understanding of how ATS systems function.
@@ -83,6 +100,15 @@ if submit1:
         pdf_image = input_pdf_setup(uploaded_file)
         response = get_gemini_response(input_prompt1, pdf_image, input_text)
         st.subheader("The response is")
+        st.write(response)
+    else:
+        st.write("Please upload first")
+
+elif submit2:  # New condition
+    if uploaded_file is not None:
+        pdf_image = input_pdf_setup(uploaded_file)
+        response = get_gemini_response(input_prompt2, pdf_image, input_text)
+        st.subheader("Suggested Keyword Improvements")
         st.write(response)
     else:
         st.write("Please upload first")
